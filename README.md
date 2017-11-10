@@ -2,21 +2,21 @@ remedy-rest
 ==============
 [![Coverage Status](https://coveralls.io/repos/github/mvollset/remedy-rest/badge.svg?branch=master)](https://coveralls.io/github/mvollset/remedy-rest?branch=master)
 
-Node.js rest client for ARS
+Node.js rest client for Innovation suite and Remedy ARS
 
 ## Installation
- `npm install remedy-rest`
+ `npm install innovationsuite-rest`
 
 ##Usage
 
 ```js
-var remedy=require('remedy-rest');
+var remedy=require('innovationsuite-rest');
 var client=remedy({
         username: "Demo",
         password: "password",
-        host: "remedy01.test.local",//Server where the rest api is running usually the AR server
-        port: "8008",//Port where the rest api is exposed.
-        https: false,
+        host: "developer1234.innovate.bmc.com",//Server where the rest api is running usually the AR server
+        port: "443",//Port where the rest api is exposed.
+        https: true,
         allowGuestuser: false
 });
 
@@ -25,14 +25,14 @@ var client=remedy({
 ##Quick example
 Lists all mailboxes in AR System Email Mailbox Configuration
 ```js
-var remedy = require('remedy-rest');
+var remedy = require('innovationsuite-rest');
 var client = remedy({
     username: "Demo",
     password: "password",
-    host: "remedy01.test.local", //Server where the rest api is running, usually the AR server
-    port: "8008", //Port where the rest api is exposed.
-    https: false
-});
+   host: "developer1234.innovate.bmc.com",//Server where the rest api is running usually the AR server
+        port: "443",//Port where the rest api is exposed.
+        https: true,
+   });
 
 client.login(function(err, callback) {
     if (err) {
@@ -40,7 +40,7 @@ client.login(function(err, callback) {
     } else {
         client.get({
             path: {
-                schema: "AR System Email Mailbox Configuration" //AR Schema name
+                schema: "org.ars.lib:recorddef" //AR Schema name/Innovation suite record definition
             }
         }, function(err, data) {
             if (err) {
