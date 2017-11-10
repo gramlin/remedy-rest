@@ -19,7 +19,8 @@ function Client(config) {
     this._config = config;
     this.userinfo = {
         username: config.username,
-        password: config.password
+        password: config.password,
+        resourceType: "com.bmc.arsys.rx.application.user.command.LoginCommand"
     };
     this.serverinfo = {
         host: config.host,
@@ -47,7 +48,7 @@ function Client(config) {
     }
 
     this.rpcQueue = config.rpcQueue;
-    this.rooturl = "http" + (this.https ? "s" : "") + "://" + this.serverinfo.host + ":" + this.serverinfo.port + "/api/arsys/v1/";
+    this.rooturl = "http" + (this.https ? "s" : "") + "://" + this.serverinfo.host + ":" + this.serverinfo.port + "/api/rx/application/";
     this.token = null;
     EventEmitter.call(this);
 
@@ -150,7 +151,7 @@ Client.prototype.createGetUrlFromArgs = function(args) {
         }
 
     }
-    var url = this.rooturl + "entry/" + path.join("/")
+    var url = this.rooturl + "datapage/?dataPageType=com.bmc.arsys.rx.application.record.datapage.RecordInstanceDataPageQuery" + path.join("/")
     if (queryp.length > 0) {
         url = url + "?" + queryp.join("&");
     }
@@ -229,15 +230,16 @@ Client.prototype.getRequestOptions = function(options, additionalHeaders) {
     return _.extend(defaultoptions, options);
 }
 Client.prototype.login = function(callback) {
-
+    userinfo.resourceType="com.bmc.arsys.rx.application.user.command.LoginCommand";
     var post_data = querystring.stringify(this.userinfo);
-
+    
     var post_options = this.getRequestOptions({
-        path: "http" + (this.https ? "s" : "") + "://" + this.serverinfo.host + ":" + this.serverinfo.port + "/api/jwt/login",
+        path: "http" + (this.https ? "s" : "") + "://" + this.serverinfo.host + ":" + this.serverinfo.port + "/api/rx/application/command",
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            "Content-Length": Buffer.byteLength(post_data)
+            "Content-Length": Buffer.byteLength(post_data),
+            "X-Requested-By": "X"
         }
     });
     var self = this;
